@@ -21,14 +21,14 @@ class LoggedOut extends AuthenticationEvent {
   String toString() => 'LoggedOut';
 }
 
-class LoggedInNow extends AuthenticationEvent{
-  final String key;
-
-  LoggedInNow(this.key):super([key]);
-  @override
-  String toString() {
-    // TODO: implement toString
-    return 'Logged in now with : key : $key';
-  }
-
-}
+//class LoggedInNow extends AuthenticationEvent{
+//  final String key;
+//
+//  LoggedInNow({@required this.key}):super([key]);
+//  @override
+//  String toString() {
+//    // TODO: implement toString
+//    return 'Logged in now with : key : $key';
+//  }
+//
+//}

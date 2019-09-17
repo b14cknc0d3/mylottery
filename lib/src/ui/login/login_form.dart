@@ -27,7 +27,7 @@ class _LoginFormState extends State<LoginForm> {
       _passwordController.text.isNotEmpty;
 
   bool isLoginButtonEnabled(LoginState state) {
-    return state.isFormValid && !state.isSubmitting;
+    return state.isFormValid && isPopulated && !state.isSubmitting;
   }
 
   ApiLoader get _apiLoader => widget._apiLoader;
@@ -37,13 +37,15 @@ class _LoginFormState extends State<LoginForm> {
     // TODO: implement initState
     super.initState();
     _loginBloc = BlocProvider.of<LoginBloc>(context);
+    _usernameController.addListener(_onUsernameChange);
+    _passwordController.addListener(_onPasswordChanged);
   }
 
   @override
   Widget build(BuildContext context) {
     return BlocListener<LoginBloc, LoginState>(
       listener: (context, state) {
-        print('Form:$state');
+
         if (state.isFailure) {
           Scaffold.of(context)
             ..hideCurrentSnackBar()
@@ -77,7 +79,7 @@ class _LoginFormState extends State<LoginForm> {
         }
       },
       child: BlocBuilder<LoginBloc, LoginState>(builder: (context, state) {
-        print('form builder:$state');
+
         return Padding(
           padding: EdgeInsets.all(20),
           child: Form(
@@ -90,8 +92,13 @@ class _LoginFormState extends State<LoginForm> {
                 controller: _usernameController,
                 decoration: InputDecoration(
                   icon: Icon(Icons.email),
+
                   labelText: 'username',
+
                 ),
+                validator: (_){
+                  return !state.isUsernameValid ? 'Invalid username':null;
+                },
                 autocorrect: false,
               ),
               TextFormField(
@@ -144,14 +151,26 @@ class _LoginFormState extends State<LoginForm> {
     super.dispose();
     _usernameController.dispose();
     _passwordController.dispose();
-    _loginBloc.dispose();
+
   }
+
 
   void _onFormSubmitted() {
     _loginBloc.dispatch(
       LoginWithUserNamePass(
           username: _usernameController.text.trim(),
           password: _passwordController.text.trim()),
+    );
+  }
+  void _onUsernameChange() {
+    _loginBloc.dispatch(
+      UsernameChange(username: _usernameController.text),
+    );
+  }
+
+  void _onPasswordChanged() {
+    _loginBloc.dispatch(
+      PasswordChanged(password: _passwordController.text),
     );
   }
 }

@@ -25,13 +25,13 @@ class AuthenticationBloc
       yield* _mapLoggedInState();
     } else if (event is LoggedOut) {
       yield* _mapLoggedOutState();
-    } else if(event is LoggedInNow){
-      try{
-        _apiLoader.saveKey(event.key);
-        yield Authenticated(await _apiLoader.readKey());
-      }catch (e){
-
-      }
+//    } else if(event is LoggedInNow){
+//      try{
+//        _apiLoader.saveKey(event.key);
+//        yield Authenticated(await _apiLoader.readKey());
+//      }catch (e){
+//
+//      }
 
     }
   }
@@ -41,7 +41,7 @@ class AuthenticationBloc
     try {
       final isSignedIn = await _apiLoader.hasKey();
       if (isSignedIn) {
-        yield Authenticated(await _apiLoader.readKey());
+        yield Authenticated(key:await _apiLoader.readKey());
       }
     } catch (_) {
       yield Unauthenticated();
@@ -49,7 +49,7 @@ class AuthenticationBloc
   }
 
   Stream<AuthenticationState> _mapLoggedInState() async* {
-    yield Authenticated(await _apiLoader.readKey());
+    yield Authenticated(key:await _apiLoader.readKey());
   }
 
   Stream<AuthenticationState> _mapLoggedOutState() async* {

@@ -39,8 +39,12 @@ class ApiLoader {
   Future<bool> hasKey() async {
     final prefs = await SharedPreferences.getInstance();
     final k = 'key';
-    final v = prefs.getString(k) ?? null;
-    return v != null;
+    final v = prefs.getString(k) ;
+    if(v == null ){
+      return false;
+    }else{
+      return true;
+    }
   }
 
   Future<String> readKey() async {

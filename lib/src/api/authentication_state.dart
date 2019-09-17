@@ -14,7 +14,9 @@ class Uninitialized extends AuthenticationState {
 class Authenticated extends AuthenticationState {
   final String key;
 
-  Authenticated(this.key) : super([key]);
+  Authenticated({@required this.key})
+      : assert(key != null),
+        super([key]);
 
   @override
   String toString() => 'Authenticated { key: $key }';
