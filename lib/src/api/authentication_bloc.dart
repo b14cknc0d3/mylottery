@@ -25,6 +25,14 @@ class AuthenticationBloc
       yield* _mapLoggedInState();
     } else if (event is LoggedOut) {
       yield* _mapLoggedOutState();
+    } else if(event is LoggedInNow){
+      try{
+        _apiLoader.saveKey(event.key);
+        yield Authenticated(await _apiLoader.readKey());
+      }catch (e){
+
+      }
+
     }
   }
 

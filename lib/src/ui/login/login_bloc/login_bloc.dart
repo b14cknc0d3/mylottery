@@ -36,11 +36,13 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
   Stream<LoginState> _mapLoginWithUserNamePass(
       {String username, String password}) async* {
     yield LoginState.loading();
+
     try {
-      final String key = await _apiLoader.doLogin(username, password);
-      if (key.isNotEmpty){
+      await _apiLoader.doLogin(username, password);
+//       final String  key =
+//       _authenticationBloc.dispatch(LoggedInNow(key));
         yield LoginState.success();
-      }
+
     } catch (_) {
       yield LoginState.failure();
     }

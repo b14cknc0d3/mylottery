@@ -27,7 +27,7 @@ class _LoginFormState extends State<LoginForm> {
       _passwordController.text.isNotEmpty;
 
   bool isLoginButtonEnabled(LoginState state) {
-    return state.isFormValid  && !state.isSubmitting;
+    return state.isFormValid && !state.isSubmitting;
   }
 
   ApiLoader get _apiLoader => widget._apiLoader;
@@ -115,7 +115,18 @@ class _LoginFormState extends State<LoginForm> {
                     LoginButton(
                       onPressed:
                           isLoginButtonEnabled(state) ? _onFormSubmitted : null,
-                    )
+                    ),
+                    RaisedButton(
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(30.0),
+                      ),
+                      color: Colors.deepOrange[300],
+                      child: Text('Continue Without Login'),
+                      onPressed: () => Navigator.pushReplacement(
+                          context,
+                          MaterialPageRoute(
+                              builder: (BuildContext context) => SearchHome())),
+                    ),
                   ],
                 ),
               ),
@@ -133,6 +144,7 @@ class _LoginFormState extends State<LoginForm> {
     super.dispose();
     _usernameController.dispose();
     _passwordController.dispose();
+    _loginBloc.dispose();
   }
 
   void _onFormSubmitted() {
@@ -140,6 +152,15 @@ class _LoginFormState extends State<LoginForm> {
       LoginWithUserNamePass(
           username: _usernameController.text.trim(),
           password: _passwordController.text.trim()),
+    );
+  }
+}
+
+class SearchHome extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      child: Text('SearchHome'),
     );
   }
 }

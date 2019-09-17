@@ -23,17 +23,17 @@ class ApiLoader {
     return result;
   }
 
-  Future<String> doLogin(String username, String password) async {
+  Future<void> doLogin(String username, String password) async {
     print('doLogin :$username : $password');
-    final key = await client.login(username, password);
-    print(key);
-    if (key.contains(null)) {
-      print(null.toString());
-    } else if (key.contains('0')) {
-      print('Error while Login');
-    }
-    _saveKey(key);
-    return key;
+    await client.login(username, password);
+//    print(key);
+//    if (key.contains(null)) {
+//      print(null.toString());
+//    } else if (key.contains('0')) {
+//      print('Error while Login');
+//    }
+//    saveKey(key);
+//    return key;
   }
 
   Future<bool> hasKey() async {
@@ -55,7 +55,7 @@ class ApiLoader {
     prefs.clear();
   }
 
-  Future<void> _saveKey(String key) async {
+  Future<void> saveKey(String key) async {
     final prefs = await SharedPreferences.getInstance();
     final k = 'key';
     final v = key;
