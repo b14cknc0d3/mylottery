@@ -10,25 +10,26 @@ class ApiProvider {
   static final loginUrl = '$baseUrl/auth/login/';
 
   Future<String> login(String username, String password) async {
+    final response = await Future.delayed(
+        Duration(seconds: 2),
+        () => http.post('$loginUrl',
+            headers: {"Accept": "application/json"},
+            body: {"username": "$username", "password": "$password"}));
+    print('POST BODY:$username : $password');
 
-      final response = await http.post('$loginUrl',
-          headers: {"Accept": "application/json"},
-          body: {"username": "$username", "password": "$password"});
-      print('POST BODY:$username : $password');
-      var data = json.decode(response.body);
-      print('KEy:${data['key']}');
-      var haskey = response.body.contains('key');
-      var key = data['key'];
-      if(response.statusCode != 200 || !haskey){
-        print('!== 200 or not key');
-
-      } if(response.statusCode ==200 && haskey){
-        _saveKey(key);
-        return key;
-      }
-      return '0';
-
-
+    var data = json.decode(response.body);
+    print('KEy:${data['key']}');
+    var haskey = response.body.contains('key');
+    var key = data['key'];
+    if (response.statusCode != 200 || !haskey) {
+      print('!== 200 or not key');
+    }
+    if (response.statusCode == 200 && haskey) {
+      _saveKey(key);
+      print('Key_save_called:$key');
+      return key;
+    }
+    return '0';
   }
 
   Future<SearchSale> searchSale(String term) async {
@@ -64,17 +65,19 @@ class ApiProvider {
   }
 
   void _saveKey(key) async {
-   if(key != null || key != '0'){
-     final prefs = await SharedPreferences.getInstance();
-     final k = 'key';
-     final v = key;
-     prefs.setString(k, v);
-   }else{
-     final prefs = await SharedPreferences.getInstance();
-     final k = 'key';
+    Future.delayed(Duration(seconds: 2));
+    if (key != null || key != '0') {
+      final prefs = await SharedPreferences.getInstance();
+      final k = 'key';
+      final v = key;
+      print('Saving...key ;$v');
+      prefs.setString(k, v);
+    } else {
+      final prefs = await SharedPreferences.getInstance();
+      final k = 'key';
 
-     prefs.remove(k);
-   }
+      prefs.remove(k);
+    }
   }
 }
 

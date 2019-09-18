@@ -60,9 +60,12 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
 
     try {
       await _apiLoader.doLogin(username, password);
-//       final String  key =
-//       _authenticationBloc.dispatch(LoggedInNow(key));
-      yield LoginState.success();
+      final hasKey = await _apiLoader.hasKey();
+      if (hasKey == true) {
+        yield LoginState.success();
+      }else{
+        yield LoginState.failure();
+      }
     } catch (_) {
       yield LoginState.failure();
     }

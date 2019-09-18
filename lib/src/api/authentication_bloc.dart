@@ -40,8 +40,10 @@ class AuthenticationBloc
   Stream<AuthenticationState> _mapAppStartedState() async* {
     try {
       final isSignedIn = await _apiLoader.hasKey();
-      if (isSignedIn) {
-        yield Authenticated(key:await _apiLoader.readKey());
+      if (isSignedIn == true) {
+        yield Authenticated(key: await _apiLoader.readKey());
+      } else {
+        yield Unauthenticated();
       }
     } catch (_) {
       yield Unauthenticated();
@@ -49,7 +51,12 @@ class AuthenticationBloc
   }
 
   Stream<AuthenticationState> _mapLoggedInState() async* {
-    yield Authenticated(key:await _apiLoader.readKey());
+    final String key = await _apiLoader.readKey();
+    if (key != null) {
+      yield Authenticated(key: key);
+    }else{
+      yield Unauthenticated();
+    }
   }
 
   Stream<AuthenticationState> _mapLoggedOutState() async* {

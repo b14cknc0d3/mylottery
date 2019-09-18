@@ -24,9 +24,11 @@ class ApiLoader {
   }
 
   Future<void> doLogin(String username, String password) async {
-    print('doLogin :$username : $password');
-    await client.login(username, password);
-//    print(key);
+    print('void doLogin call');
+    await  client.login(username, password);
+//    print('doLogin :$username : $password');
+//    await client.login(username, password);
+////    print(key);
 //    if (key.contains(null)) {
 //      print(null.toString());
 //    } else if (key.contains('0')) {
