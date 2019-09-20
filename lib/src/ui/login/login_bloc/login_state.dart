@@ -8,7 +8,7 @@ class LoginState {
   final bool isSuccess;
   final bool isFailure;
 
-  bool get isFormValid => isPasswordValid;
+ bool get isFormValid => isPasswordValid;
 
   LoginState({
     @required this.isUsernameValid,

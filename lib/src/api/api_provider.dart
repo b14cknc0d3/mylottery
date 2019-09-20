@@ -33,12 +33,15 @@ class ApiProvider {
   }
 
   Future<SearchSale> searchSale(String term) async {
-    final response = await http.get(
-        '$baseUrl/?filter{lno.icontains}=$term&filter{is_winner.icontains}=1&exclude[]=phone&exclude[]=created_at',
-        headers: {
-          "Accept": "application/json",
-          'Authorization': 'Token f6c3e63f1a95b0709d2b70075d0d592e0c4a5f85'
-        });
+    final response = await Future.delayed(
+        Duration(seconds: 2),
+        () => http.get(
+                '$baseUrl/?filter{lno.icontains}=$term&filter{is_winner.icontains}=1&exclude[]=phone&exclude[]=created_at',
+                headers: {
+                  "Accept": "application/json",
+                  'Authorization':
+                      'Token f6c3e63f1a95b0709d2b70075d0d592e0c4a5f85'
+                }));
 
     final data = json.decode(utf8.decode(response.bodyBytes));
     if (response.statusCode == 200) {
