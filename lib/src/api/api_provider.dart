@@ -36,7 +36,7 @@ class ApiProvider {
     final response = await Future.delayed(
         Duration(seconds: 2),
         () => http.get(
-                '$baseUrl/?filter{lno.icontains}=$term&filter{is_winner.icontains}=1&exclude[]=phone&exclude[]=created_at',
+                '$baseUrl/api/saledatas/search/one/?filter{lno.icontains}=$term&filter{is_winner.icontains}=1&exclude[]=phone&exclude[]=created_at',
                 headers: {
                   "Accept": "application/json",
                   'Authorization':

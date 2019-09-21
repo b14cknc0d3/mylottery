@@ -4,12 +4,15 @@ import 'package:bloc/bloc.dart';
 import './bloc.dart';
 import 'package:rxdart/rxdart.dart';
 import 'package:my_lottery/src/api/api_loader.dart';
+import 'package:meta/meta.dart';
 
 class SearchBloc extends Bloc<SearchEvent, SearchState> {
-  ApiLoader _apiLoader;
+  final ApiLoader apiLoader;
+
+  SearchBloc({@required this.apiLoader}):assert(apiLoader != null);
 
   @override
-  SearchState get initialState => SearchState.empty();
+  SearchState get initialState => SearchStateEmpty();
 
   @override
   Stream<SearchState> transformEvents(
@@ -37,18 +40,14 @@ class SearchBloc extends Bloc<SearchEvent, SearchState> {
   }
 
   Stream<SearchState> _mapTextChanged(String text) async* {
-    yield SearchState.loading();
+    yield SearchStateLoading();
     try {
-      final res = await _apiLoader.search(text);
-      if (res.items.length != null) {
-        yield SearchState.success();
-      } else if (res.items.length == null) {
-        yield SearchState.notWinner();
-      } else {
-        yield SearchState.error();
-      }
+      await Future<void>.delayed(Duration(seconds: 2));
+      final res = await apiLoader.search(text);
+      print('SearchBloc:ApiLoader:Res $res');
+      yield SearchStateSuccess(res.items);
     } catch (e) {
-      yield SearchState.error();
+      yield SearchStateError('Error') ;
     }
   }
 }

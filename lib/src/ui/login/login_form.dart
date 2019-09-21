@@ -6,9 +6,10 @@ import 'package:gradient_widgets/gradient_widgets.dart';
 import 'package:my_lottery/src/api/api_loader.dart';
 import 'package:my_lottery/src/api/bloc.dart';
 import 'package:my_lottery/src/ui/login/login_bloc/bloc.dart';
-import 'package:my_lottery/src/ui/search_page/search_home.dart';
+import 'package:my_lottery/src/ui/search_page/new_search_page.dart';
+//import 'package:my_lottery/src/ui/search_page/search_home.dart';
 import 'package:my_lottery/src/utils/utils.dart';
-import 'package:flutter_custom_clippers/flutter_custom_clippers.dart';
+//import 'package:flutter_custom_clippers/flutter_custom_clippers.dart';
 import 'package:my_lottery/src/widget/bottom_curve_painter.dart';
 
 class LoginForm extends StatefulWidget {
@@ -253,7 +254,7 @@ class _LoginFormState extends State<LoginForm> {
                   onPressed: () => Navigator.pushReplacement(
                       context,
                       MaterialPageRoute(
-                          builder: (BuildContext context) => SearchHome())),
+                          builder: (BuildContext context) => SearchPage(apiLoader: _apiLoader,))),
                   child: Text(
                     'click here',
                     style: TextStyle(

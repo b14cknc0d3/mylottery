@@ -26,8 +26,8 @@ class App extends StatelessWidget {
   final AuthenticationBloc _authenticationBloc;
 
   const App(
-      {@required Key key,
-      ApiLoader apiLoader,
+      {Key key,
+      @required ApiLoader apiLoader,
       AuthenticationBloc authenticationBloc})
       : assert(apiLoader != null),
         _apiLoader = apiLoader,
@@ -81,7 +81,8 @@ class UserHomeScreen extends StatelessWidget {
         actions: <Widget>[
           IconButton(
               icon: Icon(Icons.exit_to_app),
-              onPressed: () => BlocProvider.of<AuthenticationBloc>(context).dispatch(LoggedOut())),
+              onPressed: () => BlocProvider.of<AuthenticationBloc>(context)
+                  .dispatch(LoggedOut())),
         ],
       ),
     );
