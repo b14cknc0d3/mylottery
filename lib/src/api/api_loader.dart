@@ -10,14 +10,14 @@ class ApiLoader {
 
   ApiLoader(this.client);
 
-  Future<SearchSale> search(String term) async {
+  Future<SearchResult> search(String term) async {
     final result = await client.searchSale(term);
 
-    print(result);
+    print('result.items from apiLoader:${result.oneLs.length}');
     return result;
   }
 
-  Future<List<SaleData>> getSaleData() async {
+  Future<List<OneLs>> getSaleData() async {
     final result = await client.getItem();
     print(result);
     return result;

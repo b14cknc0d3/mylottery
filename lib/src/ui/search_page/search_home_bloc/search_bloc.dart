@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'package:bloc/bloc.dart';
+import 'package:my_lottery/src/model/search_result_list.dart';
 
 import './bloc.dart';
 import 'package:rxdart/rxdart.dart';
@@ -35,19 +36,18 @@ class SearchBloc extends Bloc<SearchEvent, SearchState> {
     SearchEvent event,
   ) async* {
     if (event is TextChanged) {
-      yield* _mapTextChanged(event.text);
+      yield SearchStateLoading();
+      try {
+        await Future<void>.delayed(Duration(seconds: 2));
+        final res = await apiLoader.search(event.text);
+        print('SearchBloc:ApiLoader:Res ${res.oneLs.length}');
+        yield SearchStateSuccess(items:res.oneLs);
+
+      } catch (e) {
+        yield SearchStateError(e.toString()) ;
+      }
     }
   }
 
-  Stream<SearchState> _mapTextChanged(String text) async* {
-    yield SearchStateLoading();
-    try {
-      await Future<void>.delayed(Duration(seconds: 2));
-      final res = await apiLoader.search(text);
-      print('SearchBloc:ApiLoader:Res $res');
-      yield SearchStateSuccess(res.items);
-    } catch (e) {
-      yield SearchStateError('Error') ;
-    }
-  }
+
 }

@@ -1,58 +1,71 @@
-import 'dart:convert';
+class SearchResult {
+  List<OneLs> oneLs;
 
-class SaleData {
+  SearchResult({this.oneLs});
+
+  SearchResult.fromJson(Map<String, dynamic> json) {
+    if (json['one_ls'] != null) {
+      oneLs = new List<OneLs>();
+      json['one_ls'].forEach((v) {
+        oneLs.add(new OneLs.fromJson(v));
+      });
+    }
+  }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = new Map<String, dynamic>();
+    if (this.oneLs != null) {
+      data['one_ls'] = this.oneLs.map((v) => v.toJson()).toList();
+    }
+    return data;
+  }
+}
+
+class OneLs {
   int id;
   String lno;
   String reseller;
-  String phone;
   String address;
   String nth;
   String isWinner;
-  dynamic prizeDetails;
-  DateTime createdAt;
-  DateTime updatedAt;
+  String prizeDetails;
+  String createdAt;
+  String updatedAt;
 
-  SaleData({
-    this.id,
-    this.lno,
-    this.reseller,
-    this.phone,
-    this.address,
-    this.nth,
-    this.isWinner,
-    this.prizeDetails,
-    this.createdAt,
-    this.updatedAt,
-    bool selected = false,
-  });
+  OneLs(
+      {this.id,
+        this.lno,
+        this.reseller,
+        this.address,
+        this.nth,
+        this.isWinner,
+        this.prizeDetails,
+        this.createdAt,
+        this.updatedAt});
 
-  factory SaleData.fromJson(String str) => SaleData.fromMap(json.decode(str));
+  OneLs.fromJson(Map<String, dynamic> json) {
+    id = json['id'];
+    lno = json['lno'];
+    reseller = json['reseller'];
+    address = json['address'];
+    nth = json['nth'];
+    isWinner = json['is_winner'];
+    prizeDetails = json['prize_details'];
+    createdAt = json['created_at'];
+    updatedAt = json['updated_at'];
+  }
 
-  String toJson() => json.encode(toMap());
-
-  factory SaleData.fromMap(Map<String, dynamic> json) => new SaleData(
-    id: json["id"],
-    lno: json["lno"],
-    reseller: json["reseller"],
-    phone: json["phone"],
-    address: json["address"],
-    nth: json["nth"],
-    isWinner: json["is_winner"],
-    prizeDetails: json["prize_details"],
-    createdAt: DateTime.parse(json["created_at"]),
-    updatedAt: DateTime.parse(json["updated_at"]),
-  );
-
-  Map<String, dynamic> toMap() => {
-    "id": id,
-    "lno": lno,
-    "reseller": reseller,
-    "phone": phone,
-    "address": address,
-    "nth": nth,
-    "is_winner": isWinner,
-    "prize_details": prizeDetails,
-    "created_at": createdAt.toIso8601String(),
-    "updated_at": updatedAt.toIso8601String(),
-  };
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = new Map<String, dynamic>();
+    data['id'] = this.id;
+    data['lno'] = this.lno;
+    data['reseller'] = this.reseller;
+    data['address'] = this.address;
+    data['nth'] = this.nth;
+    data['is_winner'] = this.isWinner;
+    data['prize_details'] = this.prizeDetails;
+    data['created_at'] = this.createdAt;
+    data['updated_at'] = this.updatedAt;
+    return data;
+  }
 }

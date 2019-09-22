@@ -6,22 +6,27 @@ class SearchSale {
   SearchSale({
     this.items,
   });
-
-  factory SearchSale.fromJson(String str) => SearchSale.fromMap(json.decode(str));
-
-  String toJson() => json.encode(toMap());
-
-  factory SearchSale.fromMap(Map<String, dynamic> json) => new SearchSale(
-    items: new List<SaleResultItem>.from(json["one_ls"].map((x) => SaleResultItem.fromMap(x))),
-  );
-
-  Map<String, dynamic> toMap() => {
-    "one_ls": new List<dynamic>.from(items.map((x) => x.toMap())),
-  };
+static SearchSale fromJson(Map<String,dynamic>json){
+  final items = (json['one_ls'] as List<dynamic>).map((dynamic item)=>
+  SaleResultItem.fromMap(item as Map<String,dynamic>)).toList();
+  return SearchSale(items: items);
+}
+//  factory SearchSale.fromJson(String str) => SearchSale.fromMap(json.decode(str));
+//
+//  String toJson() => json.encode(toMap());
+//
+//  factory SearchSale.fromMap(Map<String, dynamic> json) => new SearchSale(
+//    items: new List<SaleResultItem>.from(json["one_ls"].map((x) => SaleResultItem.fromMap(x))),
+//  );
+//
+//  Map<String, dynamic> toMap() => {
+//    "one_ls": new List<dynamic>.from(items.map((x) => x.toMap())),
+//  };
 }
 
 class SaleResultItem {
   int id;
+  String name;
   String lno;
   String reseller;
   String phone;

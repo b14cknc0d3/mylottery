@@ -1,5 +1,7 @@
 import 'package:equatable/equatable.dart';
+import 'package:my_lottery/src/model/saledata_item.dart';
 import 'package:my_lottery/src/model/search_result_list.dart';
+import 'package:meta/meta.dart';
 
 
 
@@ -18,9 +20,9 @@ class SearchStateLoading extends SearchState {
 }
 
 class SearchStateSuccess extends SearchState {
-  final List<SaleResultItem> items;
+  final List<OneLs> items;
 
-  SearchStateSuccess(this.items) : super([items]);
+  SearchStateSuccess({@required this.items}) : super([items]);
 
   @override
   String toString() => 'SearchStateSuccess { items: ${items.length} }';
