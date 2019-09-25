@@ -7,6 +7,7 @@ import 'package:my_lottery/src/ui/login/login_page.dart';
 
 import 'src/api/api_provider.dart';
 import 'src/api/bloc.dart';
+import 'src/ui/user_home/user_home.dart';
 
 void main() {
   BlocSupervisor.delegate = SimpleBlocDelegate();
@@ -46,9 +47,7 @@ class App extends StatelessWidget {
         }
         if (state is Authenticated) {
           BlocProvider.of<AuthenticationBloc>(context).dispatch(LoggedIn());
-          return UserHomeScreen(
-            authenticationBloc: _authenticationBloc,
-          );
+          return UserHome(apiLoader: _apiLoader);
         } else {
           return LoginPage(apiLoader: _apiLoader);
         }

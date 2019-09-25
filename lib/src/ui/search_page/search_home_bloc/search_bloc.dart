@@ -9,7 +9,6 @@ import 'package:meta/meta.dart';
 
 class SearchBloc extends Bloc<SearchEvent, SearchState> {
   final ApiLoader apiLoader;
-
   SearchBloc({@required this.apiLoader}):assert(apiLoader != null);
 
   @override

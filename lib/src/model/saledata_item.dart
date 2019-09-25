@@ -23,14 +23,18 @@ class SearchResult {
 
 class OneLs {
   int id;
+
   String lno;
+  String name;
   String reseller;
   String address;
+  String phone;
   String nth;
   String isWinner;
   String prizeDetails;
   String createdAt;
   String updatedAt;
+  bool selected = false;
 
   OneLs(
       {this.id,
@@ -41,7 +45,9 @@ class OneLs {
         this.isWinner,
         this.prizeDetails,
         this.createdAt,
-        this.updatedAt});
+        this.updatedAt
+
+      });
 
   OneLs.fromJson(Map<String, dynamic> json) {
     id = json['id'];
