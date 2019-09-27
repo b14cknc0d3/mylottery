@@ -53,7 +53,7 @@ class ApiProvider {
   }
 
   Future<List<OneLs>> getItem() async {
-    final response = await http.get('$baseUrl/one/', headers: {
+    final response = await http.get('$baseUrl/api/saledatas/one/', headers: {
       "Accept": "application/json",
       'Authorization': 'Token f6c3e63f1a95b0709d2b70075d0d592e0c4a5f85'
     });

@@ -26,6 +26,9 @@ final  List<OneLs> items;
 
 }
 class SaleListStateError extends SaleListState{
+  final String error;
+
+  SaleListStateError(this.error);
   @override
-  String toString() => 'SaleListState error';
+  String toString() => 'SaleListState error $error';
 }

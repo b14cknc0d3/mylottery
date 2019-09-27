@@ -52,6 +52,7 @@ class OneLs {
   OneLs.fromJson(Map<String, dynamic> json) {
     id = json['id'];
     lno = json['lno'];
+    name = json['name'];
     reseller = json['reseller'];
     address = json['address'];
     nth = json['nth'];
@@ -65,6 +66,7 @@ class OneLs {
     final Map<String, dynamic> data = new Map<String, dynamic>();
     data['id'] = this.id;
     data['lno'] = this.lno;
+    data['name'] = this.name;
     data['reseller'] = this.reseller;
     data['address'] = this.address;
     data['nth'] = this.nth;

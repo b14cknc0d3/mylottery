@@ -6,6 +6,7 @@ import 'package:my_lottery/src/api/bloc.dart';
 import 'package:curved_navigation_bar/curved_navigation_bar.dart';
 import 'package:my_lottery/src/ui/user_home/sale_list_view/sale_list_bloc/bloc.dart';
 import 'package:my_lottery/src/ui/user_home/sale_list_view/sale_list_view.dart';
+import 'package:my_lottery/src/utils/utils.dart';
 import 'package:my_lottery/src/widget/buttom_nav_bar.dart';
 
 
@@ -59,7 +60,7 @@ class _HomeListPageState extends State<HomeListPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.deepPurple,
+      backgroundColor: Colors.green,
       body: bodyView(currentTab),
       bottomNavigationBar: BottomCurvedNavBar(changeCurrentTab: _changeCurrentTab,),
     );

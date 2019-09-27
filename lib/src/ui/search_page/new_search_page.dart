@@ -18,8 +18,9 @@ class SearchPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Material(
-      child: BlocProvider(
+    return MaterialApp(
+      debugShowCheckedModeBanner: false,
+      home: BlocProvider(
         builder: (context) => SearchBloc(apiLoader: apiLoader),
         child: Column(
           children: <Widget>[

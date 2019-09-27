@@ -33,7 +33,7 @@ class _BottomCurvedNavBarState extends State<BottomCurvedNavBar>
       ],
       color: Colors.white,
       buttonBackgroundColor: Colors.white,
-      backgroundColor: colorCurve,
+      backgroundColor: Colors.transparent,
       animationCurve: Curves.decelerate,
       animationDuration: Duration(milliseconds: 300),
       onTap: (int index) {
