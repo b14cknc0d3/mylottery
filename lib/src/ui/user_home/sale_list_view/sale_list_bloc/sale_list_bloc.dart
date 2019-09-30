@@ -26,7 +26,7 @@ class SaleListBloc extends Bloc<SaleListEvent, SaleListState> {
     yield SaleListStateLoading();
     try{
       final items = await apiLoader.getSaleData();
-      print('SaleListBloc: item : $items');
+      print('SaleListBloc: item : $items//phone :${items[0].phone}');
       yield SaleListStateSuccess(items: items);
     }catch (e){
       yield SaleListStateError(e.toString());

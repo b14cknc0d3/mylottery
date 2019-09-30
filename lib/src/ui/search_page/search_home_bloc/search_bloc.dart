@@ -38,9 +38,14 @@ class SearchBloc extends Bloc<SearchEvent, SearchState> {
       yield SearchStateLoading();
       try {
         await Future<void>.delayed(Duration(seconds: 2));
-        final res = await apiLoader.search(event.text);
-        print('SearchBloc:ApiLoader:Res ${res.oneLs.length}');
-        yield SearchStateSuccess(items:res.oneLs);
+        if(event.text == null){
+          yield SearchStateEmpty();
+        }else{
+          final res = await apiLoader.search(event.text);
+          print('SearchBloc:ApiLoader:Res ${res.oneLs.length}');
+          yield SearchStateSuccess(items:res.oneLs);
+        }
+
 
       } catch (e) {
         yield SearchStateError(e.toString()) ;

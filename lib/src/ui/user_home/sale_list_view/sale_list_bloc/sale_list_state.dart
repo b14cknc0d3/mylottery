@@ -22,7 +22,7 @@ final  List<OneLs> items;
 
   SaleListStateSuccess({@required this.items}):super([items]);
   @override
-  String toString() => 'SaleListStateSuccess => items :$items';
+  String toString() => 'SaleListStateSuccess => items count :${items.length}';
 
 }
 class SaleListStateError extends SaleListState{

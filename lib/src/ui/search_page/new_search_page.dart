@@ -14,54 +14,74 @@ import '../../../validators.dart';
 class SearchPage extends StatelessWidget {
   final ApiLoader apiLoader;
 
-  const SearchPage({Key key, this.apiLoader}) : super(key: key);
+  const SearchPage ({Key key, this.apiLoader}) : super( key: key );
 
   @override
-  Widget build(BuildContext context) {
+  Widget build (BuildContext context) {
     return MaterialApp(
+      darkTheme: ThemeData.dark(),
+      color: Colors.blueAccent,
+
+
+      theme: ThemeData.light( ),
+
       debugShowCheckedModeBanner: false,
       home: BlocProvider(
-        builder: (context) => SearchBloc(apiLoader: apiLoader),
-        child: Column(
-          children: <Widget>[
-            Stack(
-              children: <Widget>[
-                Container(
-                  height: MediaQuery.of(context).size.height * 0.25,
-                  width: MediaQuery.of(context).size.width,
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(15.0),
-                    gradient: LinearGradient(
-                      colors: [
-                        Color(0xffd399c1),
-                        Color(0xff9b5acf),
-                        Color(0xff611cdf),
-                      ],
+        builder: (context) => SearchBloc( apiLoader: apiLoader ),
+        child: Container(
+          color: Colors.white,
+          child: Column(
+
+            children: <Widget>[
+              Stack(
+
+                children: <Widget>[
+                  Container(
+                    height: MediaQuery
+                        .of( context )
+                        .size
+                        .height * 0.25,
+                    width: MediaQuery
+                        .of( context )
+                        .size
+                        .width,
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular( 15.0 ),
+                      gradient: LinearGradient(
+                        colors: [
+                          Color( 0xffd399c1 ),
+                          Color( 0xff9b5acf ),
+                          Color( 0xff611cdf ),
+                        ],
+                      ),
                     ),
                   ),
-                ),
-                _SearchBar(),
-                AppBar(
-                  backgroundColor: Colors.transparent,
-                  elevation: 0.0,
-                  title: Text(
-                    'Search...',
-                    style: TextStyle(fontSize: 30, fontWeight: FontWeight.bold),
-                  ),
-                  centerTitle: true,
-                )
-              ],
-            ),
-            new Divider(),
-            _carouselBox(),
-            new Divider(),
-            _SearchBody(),
-            Divider(
-              height: 10,
-            ),
-            Divider(),
+                  _SearchBar( ),
+                  AppBar(
+                    backgroundColor: Colors.transparent,
+                    elevation: 0.0,
+                    title: Text(
+                      'Search...',
+                      style: TextStyle(
+                          fontSize: 30, fontWeight: FontWeight.bold ),
+                    ),
+                    centerTitle: true,
+                  )
+                ],
+              ),
+              new Divider( ),
+              _carouselBox( ),
+
+              new Divider( ),
+
+              Divider(
+                height: 10,
+              ),
+              _SearchBody( ),
+
 //            _carouselBox(),
-          ],
+            ],
+          ),
         ),
       ),
     );
@@ -71,34 +91,34 @@ class SearchPage extends StatelessWidget {
 //###Search Body#################///
 class _SearchBody extends StatelessWidget {
   @override
-  Widget build(BuildContext context) {
+  Widget build (BuildContext context) {
     return BlocBuilder<SearchBloc, SearchState>(
       builder: (context, state) {
         if (state is SearchStateLoading) {
-          return CircularProgressIndicator();
+          return CircularProgressIndicator( );
         }
         if (state is SearchStateError) {
-          return Text(state.error.toString());
+          return Text( state.error.toString( ) );
         }
         if (state is SearchStateSuccess) {
           return state.items.isEmpty
               ? Text(
-                  'No Result',
-                  textAlign: TextAlign.center,
-                  style: TextStyle(
-                      fontSize: 20,
-                      color: Colors.red,
-                      fontWeight: FontWeight.w600),
-                )
+            'No Result',
+            textAlign: TextAlign.center,
+            style: TextStyle(
+                fontSize: 20,
+                color: Colors.red,
+                fontWeight: FontWeight.w600 ),
+          )
               :
 //          Text('${state.items[0].lno} won ${state.items[0].prizeDetails.toString()}ks');
-              Expanded(child: _SearchResults(items: state.items));
+          Expanded( child: _SearchResults( items: state.items ) );
         }
         return Text(
           'Enter Lottery Number to begin Search',
           textAlign: TextAlign.center,
           style: TextStyle(
-              fontSize: 20, color: Colors.green, fontWeight: FontWeight.w600),
+              fontSize: 20, color: Colors.green, fontWeight: FontWeight.w600 ),
         );
       },
     );
@@ -109,16 +129,16 @@ class _SearchBody extends StatelessWidget {
 class _SearchResults extends StatelessWidget {
   final List<OneLs> items;
 
-  const _SearchResults({Key key, @required this.items}) : super(key: key);
+  const _SearchResults ({Key key, @required this.items}) : super( key: key );
 
   @override
-  Widget build(BuildContext context) {
+  Widget build (BuildContext context) {
     return ListView.builder(
       itemCount: items.length,
       itemBuilder: (context, i) {
         return Padding(
-            padding: EdgeInsets.all(8.0),
-            child: _SearchResultItem(item: items[i]));
+            padding: EdgeInsets.all( 8.0 ),
+            child: _SearchResultItem( item: items[i] ) );
       },
     );
   }
@@ -127,33 +147,34 @@ class _SearchResults extends StatelessWidget {
 class _SearchResultItem extends StatelessWidget {
   final OneLs item;
 
-  const _SearchResultItem({Key key, @required this.item}) : super(key: key);
+  const _SearchResultItem ({Key key, @required this.item}) : super( key: key );
 
   @override
-  Widget build(BuildContext context) {
-    return Container(
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(15.0),
-        gradient: LinearGradient(
-          colors: [
-            Color(0xffd399c1),
-            Color(0xff9b5acf),
-            Color(0xff611cdf),
-          ],
+  Widget build (BuildContext context) {
+    return Card(
+      child: Container(
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular( 15.0 ),
+          gradient: LinearGradient(
+            colors: [
+              Color( 0xffd399c1 ),
+              Color( 0xff9b5acf ),
+              Color( 0xff611cdf ),
+            ],
+          ),
         ),
-      ),
-      child: ListTile(
-        trailing: Padding(
-          padding: const EdgeInsets.only(top: 3.0),
-          child: IconButton(
-              icon: Icon(
-                Icons.share,
-                semanticLabel: 'Share',
-                color: Colors.white,
-                size: 30,
-              ),
-              onPressed: () {}),
-        ),
+        child: ListTile(
+          trailing: Padding(
+            padding: const EdgeInsets.only( top: 3.0 ),
+            child: IconButton(
+                icon: Icon(
+                  Icons.share,
+                  semanticLabel: 'Share',
+                  color: Colors.white,
+                  size: 30,
+                ),
+                onPressed: () {} ),
+          ),
 //          trailing: CircleAvatar(
 //            backgroundColor: Colors.transparent,
 //            foregroundColor: Colors.white,
@@ -162,27 +183,30 @@ class _SearchResultItem extends StatelessWidget {
 //            ),
 //          ),
 //leading: Icon(MyFlutterApp.award,color: Colors.yellowAccent,size: 40,),
-        leading: Padding(
-          padding: const EdgeInsets.only(top: 8.0),
-          child: CircleAvatar(
-              child: Image.asset(
-            'assets/reward3.png',
-          )),
-        ),
-        title: Text(
-          'Your Lottery Number ${item.lno} Won',
-          softWrap: true,
-          textAlign: TextAlign.center,
-          style: TextStyle(
-              color: Colors.white,
-              fontWeight: FontWeight.bold,
-              wordSpacing: 0.7),
-        ),
-        subtitle: Text(
-          '${item.prizeDetails} ks',
-          textAlign: TextAlign.center,
-          style: TextStyle(
-              color: Colors.white, fontWeight: FontWeight.bold, fontSize: 23),
+          leading: Padding(
+            padding: const EdgeInsets.only( top: 8.0 ),
+            child: CircleAvatar(
+                child: Image.asset(
+                  'assets/reward3.png',
+                ) ),
+          ),
+          title: Text(
+            'Your Lottery Number ${item.lno} Won',
+            softWrap: true,
+            textAlign: TextAlign.center,
+            style: TextStyle(
+                color: Colors.white,
+                fontWeight: FontWeight.bold,
+                wordSpacing: 0.7 ),
+          ),
+          subtitle: Text(
+            '${item.prizeDetails} ks',
+            textAlign: TextAlign.center,
+            style: TextStyle(
+                color: Colors.white,
+                fontWeight: FontWeight.bold,
+                fontSize: 23 ),
+          ),
         ),
       ),
     );
@@ -193,142 +217,138 @@ class _SearchResultItem extends StatelessWidget {
 
 class _SearchBar extends StatefulWidget {
   @override
-  _SearchBarState createState() => _SearchBarState();
+  _SearchBarState createState () => _SearchBarState( );
 }
 
 class _SearchBarState extends State<_SearchBar> {
-  final _searchTextController = TextEditingController();
-  final _focusNode = FocusNode();
-  ApiLoader apiLoader = ApiLoader(ApiProvider());
+  final _searchTextController = TextEditingController( );
+  final _focusNode = FocusNode( );
+  ApiLoader apiLoader = ApiLoader( ApiProvider( ) );
   SearchBloc _searchBloc;
 
+  bool autoValidate = false;
+
   @override
-  void initState() {
-    super.initState();
-    _searchBloc = BlocProvider.of<SearchBloc>(context);
+  void initState () {
+    super.initState( );
+    _searchBloc = BlocProvider.of<SearchBloc>( context );
   }
 
   @override
-  void dispose() {
+  void dispose () {
     // TODO: implement dispose
-    super.dispose();
-    _searchTextController.dispose();
-    _focusNode.dispose();
+    super.dispose( );
+    _searchTextController.dispose( );
+    _focusNode.dispose( );
   }
 
   @override
-  Widget build(BuildContext context) {
+  Widget build (BuildContext context) {
     return Padding(
-      padding: EdgeInsets.fromLTRB(8.0, 150, 8.0, 10),
-      child: new Container(
-
+      padding: EdgeInsets.fromLTRB( 8.0, 100, 8.0, 10 ),
+      child: Container(
         decoration: BoxDecoration(
-            color: Colors.white,
-
             boxShadow: [
-              BoxShadow(
-                  color: Colors.black12,
-                  offset: Offset(0.0, 15.0),
-                  blurRadius: 15.0),
-              BoxShadow(
-                  color: Colors.black12,
-                  offset: Offset(0.0, -10.0),
-                  blurRadius: 10.0),
-            ],
-            borderRadius: BorderRadius.circular(40.0)),
-        child: Padding(
-          padding: const EdgeInsets.only(top:8.0,bottom: 8.0),
-          child: Wrap(
+            BoxShadow(
+            color: Colors.black12,
+            offset: Offset(0.0, 15.0),
+            blurRadius: 15.0),
+          BoxShadow(
+              color: Colors.black12,
+              offset: Offset(0.0, -10.0),
+              blurRadius: 10.0),],
+            borderRadius: BorderRadius.circular( 30.0 ),
+        ),
+        child: Card(
+          shape: StadiumBorder( side: BorderSide( color: Colors.blueAccent ) ),
+//          elevation: 30.0,
+          child: Padding(
+            padding: const EdgeInsets.only(left:8,right:8),
+            child: TextFormField(
 
-           children: <Widget>[
-             TextFormField(
 
-               controller: _searchTextController,
 
-               onFieldSubmitted: (text) {
-                 if (Validators.isValidSearch(_searchTextController.text) ==
-                     true) {
-                   _searchBloc.dispatch(TextChanged(text: text));
-                 }
-               },
+
+              controller: _searchTextController,
+
+              onFieldSubmitted: (text) {
+                if (Validators.isValidSearch( _searchTextController.text ) ==
+                    true) {
+                  _searchBloc.dispatch( TextChanged( text: text ) );
+                  setState(() {
+                    autoValidate = false;
+                  });
+                }else{
+                  setState(() {
+                    autoValidate = true;
+                  });
+                }
+              },
+
 //            onSaved: (text) {
 //              _searchBloc.dispatch(TextChanged(text: text));
 //            },
-               focusNode: _focusNode,
-               textAlign: TextAlign.center,
-               maxLength: 7,
+              focusNode: _focusNode,
+              textAlign: TextAlign.center,
 
-               style: TextStyle(fontWeight: FontWeight.w600, fontSize: 22),
-               autovalidate: true,
-               validator: (_) {
-                 return !Validators.isValidSearch( _searchTextController.text )
-                     ? 'သင့်ရဲ့ ထီနံပါတ်ကိုရိုက်ထည့်ပါ'
-                     : null;
-               },
-               autocorrect: false,
-               decoration: InputDecoration(
-                 disabledBorder:InputBorder.none,
-                   border: InputBorder.none,
 
-                   fillColor: Color.lerp(Colors.white, Colors.white,2.0),
-                   counterStyle: TextStyle(color: Colors.green,fontWeight: FontWeight.bold),
+              style: TextStyle( fontWeight: FontWeight.w600, fontSize: 22 ),
 
-                  prefixIcon: Icon(Icons.search),
+              autocorrect: false,
 
-                   suffixIcon: GestureDetector(
-                     child: Icon(Icons.clear),
-                     onTap: _onClearTapped,
-                   ),
+              decoration: InputDecoration(
+                  fillColor: Colors.transparent,
+                  filled: true,
+                  focusColor: Colors.white,
+
+
+                  disabledBorder: InputBorder.none,
+                  border: InputBorder.none,
+                  errorText: autoValidate ? 'သင့်ရဲ့ ထီနံပါတ်ကိုရိုက်ထည့်ပါ': null,
+                  hintMaxLines: 7,
+
+                  counterStyle: TextStyle(
+                      color: Colors.green, fontWeight: FontWeight.bold ),
+
+                  prefixIcon: Icon( Icons.search ),
+                    hintText: 'search here',
+                  suffixIcon: IconButton(
+                    icon: Icon( Icons.clear ),
+                    onPressed: _onClearTapped,
+                  ),
 //                  labelText: 'search',
-                   contentPadding: EdgeInsets.only(left: 30.0,top: 10, right: 8.0,bottom: 8)),
-             ),
-           ],
+                  contentPadding: EdgeInsets.only(
+                      left: 30.0, top: 10, right: 8.0, bottom: 1 ) ),
+            ),
           ),
-//                    child: ListTile(
-//                      leading: Icon(Icons.search),
-//                      title: TextField(
-//                        decoration: InputDecoration(
-//                          hintText: 'search..',
-//                        ),
-//                      ),
-//                      trailing: new Icon(Icons.clear),
-//                    ),
         ),
       ),
     );
   }
 
-  void _onClearTapped() {
+  void _onClearTapped () {
     _searchTextController.text = '';
-    _searchBloc.dispatch(TextChanged(text: ''));
+    // _searchBloc.dispatch( TextChanged( text: '' ) );
+    setState( () {
+      autoValidate = false;
+    } );
   }
+
+
+
 }
 
-Widget _carouselBox() {
+Widget _carouselBox () {
   return Padding(
-    padding: const EdgeInsets.all(0.0),
-    child: Container(
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(30),
-        color: Colors.white,
-        boxShadow: [
-          BoxShadow(
-              color: Colors.black12,
-              offset: Offset(0.0, 15.0),
-              blurRadius: 15.0),
-          BoxShadow(
-              color: Colors.black12,
-              offset: Offset(0.0, -10.0),
-              blurRadius: 10.0),
-        ],
-      ),
-      height: 200,
+    padding: const EdgeInsets.all( 0.0 ),
+    child: SizedBox(
+      height: 210,
       child: Carousel(
-        radius: Radius.circular(30.0),
+        radius: Radius.circular( 0.0 ),
         borderRadius: true,
         boxFit: BoxFit.cover,
         animationCurve: Curves.fastOutSlowIn,
-        animationDuration: Duration(milliseconds: 1000),
+        animationDuration: Duration( milliseconds: 1000 ),
         dotSize: 5.0,
         dotIncreasedColor: Colors.blue,
         dotBgColor: Colors.transparent,
@@ -338,9 +358,9 @@ Widget _carouselBox() {
         indicatorBgPadding: 7.0,
         images: [
           NetworkImage(
-              'https://cdn-images-1.medium.com/max/2000/1*GqdzzfB_BHorv7V2NV7Jgg.jpeg'),
+              'https://cdn-images-1.medium.com/max/2000/1*GqdzzfB_BHorv7V2NV7Jgg.jpeg' ),
           NetworkImage(
-              'https://cdn-images-1.medium.com/max/2000/1*wnIEgP1gNMrK5gZU7QS0-A.jpeg'),
+              'https://cdn-images-1.medium.com/max/2000/1*wnIEgP1gNMrK5gZU7QS0-A.jpeg' ),
           //ExactAssetImage( "assets/images/LaunchImage.jpg" ),
         ],
       ),

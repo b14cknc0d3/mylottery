@@ -38,14 +38,21 @@ class AuthenticationBloc
 
   // ignore: missing_return
   Stream<AuthenticationState> _mapAppStartedState() async* {
+
     try {
+//      await Future.delayed(Duration(milliseconds: 300));
       final isSignedIn = await _apiLoader.hasKey();
       if (isSignedIn == true) {
+//        yield AuthenticationStateLoading();
+
         yield Authenticated(key: await _apiLoader.readKey());
       } else {
+//        yield AuthenticationStateLoading();
+//        await Future.delayed(Duration(milliseconds: 300));
         yield Unauthenticated();
       }
     } catch (_) {
+      await Future.delayed(Duration(milliseconds: 300));
       yield Unauthenticated();
     }
   }
@@ -53,8 +60,10 @@ class AuthenticationBloc
   Stream<AuthenticationState> _mapLoggedInState() async* {
     final String key = await _apiLoader.readKey();
     if (key != null) {
+
       yield Authenticated(key: key);
     }else{
+
       yield Unauthenticated();
     }
   }

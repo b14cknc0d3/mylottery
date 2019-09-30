@@ -62,6 +62,7 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
       await _apiLoader.doLogin(username, password);
       final hasKey = await _apiLoader.hasKey();
       if (hasKey == true) {
+
         yield LoginState.success();
       }else{
         yield LoginState.failure();

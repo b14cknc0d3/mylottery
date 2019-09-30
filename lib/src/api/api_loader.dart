@@ -19,7 +19,7 @@ class ApiLoader {
 
   Future<List<OneLs>> getSaleData() async {
     final result = await client.getItem();
-    print(result);
+    print('result getSaledata :${result.length}');
     return result;
   }
 

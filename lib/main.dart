@@ -45,8 +45,12 @@ class App extends StatelessWidget {
         if (state is Unauthenticated) {
           return LoginPage(apiLoader: _apiLoader);
         }
+        if(state is AuthenticationStateLoading){
+          return  Container(color:Colors.white,child: Center(child: Container(child: CircularProgressIndicator(),),));
+        }
         if (state is Authenticated) {
           BlocProvider.of<AuthenticationBloc>(context).dispatch(LoggedIn());
+
           return UserHome(apiLoader: _apiLoader);
         } else {
           return LoginPage(apiLoader: _apiLoader);

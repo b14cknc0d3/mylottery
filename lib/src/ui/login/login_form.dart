@@ -7,8 +7,10 @@ import 'package:my_lottery/src/api/api_loader.dart';
 import 'package:my_lottery/src/api/bloc.dart';
 import 'package:my_lottery/src/ui/login/login_bloc/bloc.dart';
 import 'package:my_lottery/src/ui/search_page/new_search_page.dart';
+
 //import 'package:my_lottery/src/ui/search_page/search_home.dart';
 import 'package:my_lottery/src/utils/utils.dart';
+
 //import 'package:flutter_custom_clippers/flutter_custom_clippers.dart';
 import 'package:my_lottery/src/widget/bottom_curve_painter.dart';
 
@@ -73,19 +75,20 @@ class _LoginFormState extends State<LoginForm> {
         if (state.isSubmitting) {
           Scaffold.of(context)
             ..hideCurrentSnackBar()
-            ..showSnackBar(
-              SnackBar(
-                content: CircularProgressIndicator(),
-              ),
-//                content: Row(
-//                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-//                  children: [
-//                    Text('Logging In...'),
-//                    CircularProgressIndicator(),
-//                  ],
-//                ),
-//              ),
-            );
+            ..showBodyScrim(true, 0.1)
+            ..showSnackBar(SnackBar(
+              backgroundColor: Colors.white,
+                content: Container(
+                  color: Colors.white,
+
+                  child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+
+              children: <Widget>[
+                  Text('Logging In....',style: TextStyle(color: Colors.black,fontSize: 20,fontWeight: FontWeight.w600),)
+                  ,CircularProgressIndicator(backgroundColor: Colors.black,)],
+            ),
+                )));
         }
         if (state.isSuccess) {
           BlocProvider.of<AuthenticationBloc>(context).dispatch(LoggedIn());
@@ -94,7 +97,6 @@ class _LoginFormState extends State<LoginForm> {
       child: BlocBuilder<LoginBloc, LoginState>(
         builder: (context, state) {
           return Scaffold(
-
             resizeToAvoidBottomPadding: false,
             key: _scaffoldKey,
             floatingActionButtonLocation:
@@ -254,7 +256,9 @@ class _LoginFormState extends State<LoginForm> {
                   onPressed: () => Navigator.pushReplacement(
                       context,
                       MaterialPageRoute(
-                          builder: (BuildContext context) => SearchPage(apiLoader: _apiLoader,))),
+                          builder: (BuildContext context) => SearchPage(
+                                apiLoader: _apiLoader,
+                              ))),
                   child: Text(
                     'click here',
                     style: TextStyle(
@@ -301,8 +305,6 @@ class _LoginFormState extends State<LoginForm> {
     );
   }
 }
-
-
 
 GradientText _linearGradientText() {
   return GradientText('Login',

@@ -51,6 +51,7 @@ class OneLs {
 
   OneLs.fromJson(Map<String, dynamic> json) {
     id = json['id'];
+    phone = json['phone'];
     lno = json['lno'];
     name = json['name'];
     reseller = json['reseller'];

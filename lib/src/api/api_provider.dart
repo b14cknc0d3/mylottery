@@ -60,6 +60,7 @@ class ApiProvider {
     final data = json.decode(utf8.decode(response.bodyBytes));
     if (response.statusCode == 200) {
       print('SALEDATA:$data');
+      print('parsedJson Data:${parsedJson(data)[0].phone}//:${parsedJson(data)[0].lno}');
       return parsedJson(data);
     } else {
       return null;
@@ -83,7 +84,7 @@ class ApiProvider {
   }
 }
 
-Future<List<OneLs>> parsedJson(dynamic responseBody) {
-  final parsed = responseBody.cast < Map<String, dynamic>();
-  return parsed.Map<OneLs>((json) => OneLs.fromJson(json)).toList();
+List<OneLs> parsedJson(dynamic responseBody) {
+  final parsed = responseBody.cast<Map<String, dynamic>>();
+  return parsed.map<OneLs>((json) => OneLs.fromJson(json)).toList();
 }

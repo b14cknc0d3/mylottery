@@ -26,16 +26,23 @@ class _SaleListViewState extends State<SaleListView> {
   }
 
   @override
+  void dispose() {
+    // TODO: implement dispose
+    super.dispose();
+//    _saleListBloc.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Column(
       children: <Widget>[
         Stack(
           children: <Widget>[
             Container(
-              height: MediaQuery.of(context).size.height * 0.25,
+              height: MediaQuery.of(context).size.height * 0.1,
               width: MediaQuery.of(context).size.width,
               decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(15.0),
+//                borderRadius: BorderRadius.circular(15.0),
                 gradient: LinearGradient(
                   colors: [
                     Color(0xffd399c1),
@@ -47,14 +54,11 @@ class _SaleListViewState extends State<SaleListView> {
             ),
             _appBar(),
 //            Divider(color: Colors.white,),
-
-
-      ],
-
-
+          ],
         ),
-
-        Expanded(child: _DataTableView())  ],
+        Expanded(child: _DataTableView()),
+        SizedBox(height: 35,),
+      ],
     );
   }
 
@@ -63,7 +67,7 @@ class _SaleListViewState extends State<SaleListView> {
       title: Text(
         'Sale Data List',
         style: TextStyle(
-            color: Colors.white, fontWeight: FontWeight.bold, fontSize: 29),
+            color: Colors.black, fontWeight: FontWeight.bold, fontSize: 29),
       ),
       centerTitle: true,
       bottomOpacity: 0.0,
@@ -82,31 +86,28 @@ class _DataTableView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MyTableApp();
-//    return BlocBuilder<SaleListBloc, SaleListState>(
-//      builder: (context, state) {
-//        if (state is SaleListStateLoading) {
-//          return CircularProgressIndicator();
-//        }
-//        if (state is SaleListStateError) {
-//          return Padding(padding:EdgeInsets.fromLTRB(20, 150, 20, 10),child: MyTableApp());
-//        }
-//        if (state is SaleListStateSuccess) {
-//          return state.items.isEmpty
-//              ? Text('not data')
-//              : Padding(padding: EdgeInsets.only(top: 150,left: 10),
-//                  child: MyTableApp(),
-//                );
-//        }
-//        return _showDialog(context);
-//      },
-//    );
+//    return MyTableApp();
+    return BlocBuilder<SaleListBloc, SaleListState>(
+      builder: (context, state) {
+        if (state is SaleListStateLoading) {
+          return Container(child: Center(child: Container(child: CircularProgressIndicator())));
+        }
+        if (state is SaleListStateError) {
+          return Text('error');
+        }
+        if (state is SaleListStateSuccess) {
+          return state.items.isEmpty
+              ? Text('not data')
+              : MyTableApp(items:state.items);
+        }
+        return _showDialog(context);
+      },
+    );
   }
 
   Widget _showDialog(context) {
     return Center(
         child: Container(
-
       child: Text('resfresh'),
     ));
   }
