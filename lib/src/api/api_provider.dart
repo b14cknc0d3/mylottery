@@ -60,10 +60,16 @@ class ApiProvider {
     final data = json.decode(utf8.decode(response.bodyBytes));
     if (response.statusCode == 200) {
       print('SALEDATA:$data');
-      print('parsedJson Data:${parsedJson(data)[0].phone}//:${parsedJson(data)[0].lno}');
-      return parsedJson(data);
+//      print('parsedJson Data:${parsedJson(data)[0].phone}//:${parsedJson(data)[0].lno}');
+     if(data.isNotEmpty){
+       print(parsedJson(data));
+       return parsedJson(data);
+     }else{
+       return [];
+
+     }
     } else {
-      return null;
+      return [];
     }
   }
 
@@ -82,6 +88,28 @@ class ApiProvider {
       prefs.remove(k);
     }
   }
+
+
+  Future deleteSale(int id,String key) async {
+    try{
+    final a =   await http.delete('$baseUrl/api/saledatas/one/$id',headers: {
+        "Accept": "application/json",
+        'Authorization': 'Token $key'
+      });
+    if(a.statusCode ==204 || a.statusCode ==200){
+      print(a.statusCode);
+      return true;
+    }else{
+      return false;
+    }
+
+
+    }catch (e){
+      throw Exception(e.toString());
+    }
+
+  }
+
 }
 
 List<OneLs> parsedJson(dynamic responseBody) {

@@ -16,6 +16,9 @@ class AuthenticationBloc
   AuthenticationState get initialState => Uninitialized();
 
   @override
+
+
+  @override
   Stream<AuthenticationState> mapEventToState(
     AuthenticationEvent event,
   ) async* {

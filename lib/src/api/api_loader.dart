@@ -25,7 +25,7 @@ class ApiLoader {
 
   Future<void> doLogin(String username, String password) async {
     print('void doLogin call');
-    await  client.login(username, password);
+    await client.login(username, password);
 //    print('doLogin :$username : $password');
 //    await client.login(username, password);
 ////    print(key);
@@ -38,13 +38,19 @@ class ApiLoader {
 //    return key;
   }
 
+  Future deleteSale(int id) async {
+    var key = await readKey();
+    final a = await client.deleteSale(id, key);
+    return a;
+  }
+
   Future<bool> hasKey() async {
     final prefs = await SharedPreferences.getInstance();
     final k = 'key';
-    final v = prefs.getString(k) ;
-    if(v == null ){
+    final v = prefs.getString(k);
+    if (v == null) {
       return false;
-    }else{
+    } else {
       return true;
     }
   }

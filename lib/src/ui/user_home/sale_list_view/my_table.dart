@@ -2,10 +2,11 @@ import 'package:flutter/material.dart';
 import 'dart:io' show Platform;
 import 'package:flutter/foundation.dart';
 import 'package:data_tables/data_tables.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:my_lottery/src/api/api_loader.dart';
 import 'package:my_lottery/src/api/api_provider.dart';
 import 'package:my_lottery/src/model/saledata_item.dart';
-
+import 'package:my_lottery/src/ui/user_home/sale_list_view/sale_list_bloc/bloc.dart';
 // ignore: unused_element
 void _setTargetPlatformForDesktop() {
   TargetPlatform targetPlatform;
@@ -29,8 +30,10 @@ class MyTableApp extends StatefulWidget {
 }
 
 class _MyTableAppState extends State<MyTableApp> {
+  SaleListBloc saleListBloc;
   ApiLoader apiLoader = ApiLoader(ApiProvider());
   int _rowsPerPage = PaginatedDataTable.defaultRowsPerPage;
+
   int _sortColumnIndex;
   bool _sortAscending = true;
   bool _showNativeTable = true;
@@ -41,10 +44,13 @@ class _MyTableAppState extends State<MyTableApp> {
 
   List<OneLs> _items = [];
 
+//  get tableItemsCount => _items.length;
+
   @override
   void initState() {
     _items = items;
     super.initState();
+    saleListBloc = BlocProvider.of(context);
   }
 
   void _sort<T>(
@@ -134,7 +140,7 @@ class _MyTableAppState extends State<MyTableApp> {
                 }
               },
               cells: <DataCell>[
-                DataCell(Text('${one.id}')),
+//                DataCell(Text('${one.id}')),
                 DataCell(Text('${one.lno}')),
                 DataCell(Text('${one.name}')),
                 DataCell(Text('${one.phone.toString()}')),
@@ -147,18 +153,18 @@ class _MyTableAppState extends State<MyTableApp> {
                 DataCell(Text(
                   '${one.nth}'.toString(),
                 )),
-                DataCell(ButtonBar(
-                  children: <Widget>[
-                    IconButton(
-                      icon: Icon(Icons.delete),
-                      onPressed: () {
-                        setState(() {
-                          _items.remove(one);
-                        });
-                      },
-                    ),
-                  ],
-                )),
+//                DataCell(ButtonBar(
+//                  children: <Widget>[
+//                    IconButton(
+//                      icon: Icon(Icons.delete),
+//                      onPressed: () {
+//                        setState(() {
+//                          _items.remove(one);
+//                        });
+//                      },
+//                    ),
+//                  ],
+//                )),
               ]);
         },
         header: Container(
@@ -185,7 +191,7 @@ class _MyTableAppState extends State<MyTableApp> {
             });
           }
         },
-        rowCountApproximate: true,
+        rowCountApproximate: false,
         actions: <Widget>[
           IconButton(
             icon: Icon(Icons.info_outline),
@@ -202,20 +208,65 @@ class _MyTableAppState extends State<MyTableApp> {
         ],
         selectedActions: <Widget>[
           IconButton(
-            icon: Icon(Icons.delete),
+            icon: Icon(Icons.delete_forever,color: Colors.red,semanticLabel: 'delete sale',),
             onPressed: () {
-              setState(() {});
+              setState(() {
+                var rowSelectedCount =
+                    _items?.where((d) => d?.selected == true)?.toList()?.length;
+                print('RSC :$rowSelectedCount');
+                if (rowSelectedCount == 1) {
+                  for (var row in _items) {
+                    if (row.selected == true && row.selected != null) {
+                      print("u selected : ${row.id} ==> ${row.lno}");
+                      saleListBloc.dispatch(SaleDataDeleteEvent(id: row.id));
+//                      apiLoader.deleteSale(row.id);
+                      saleListBloc.dispatch(SaleListRefresh());
+                    } else {
+                      print('XxXxX');
+                    }
+                  }
+                } else {
+                  Scaffold.of(context)
+                    ..showSnackBar(SnackBar(
+                        backgroundColor: Colors.redAccent,
+                        elevation: 2.0,
+                        behavior: SnackBarBehavior.floating,
+                        action: SnackBarAction(
+                            label: 'x',
+                            onPressed: () {
+                              Scaffold.of(context)
+                                ..hideCurrentSnackBar(
+                                    reason: SnackBarClosedReason.hide);
+                            }),
+                        content: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: <Widget>[
+                            Icon(Icons.warning),
+                            Text(
+                              'You can\'t delete multiple data at once !',
+                              style: TextStyle(
+                                fontWeight: FontWeight.w600,
+                                fontSize: 14,
+                              ),
+                              textAlign: TextAlign.center,
+                            ),
+                          ],
+                        )));
+                }
+              });
+
+//              apiLoader.deleteSale();
             },
           ),
         ],
 //        mobileIsLoading: CircularProgressIndicator(),
         noItems: Text("Not  Found"),
         columns: <DataColumn>[
-          DataColumn(
-              label: const Text('Lottery (ID)'),
-              numeric: true,
-              onSort: (int columnIndex, bool ascending) =>
-                  _sort<num>((OneLs d) => d.id, columnIndex, ascending)),
+//          DataColumn(
+//              label: const Text('Lottery (ID)'),
+//              numeric: true,
+//              onSort: (int columnIndex, bool ascending) =>
+//                  _sort<num>((OneLs d) => d.id, columnIndex, ascending)),
           DataColumn(
               label: const Text('Lottery (No)'),
 //              numeric: true,
@@ -228,7 +279,6 @@ class _MyTableAppState extends State<MyTableApp> {
                   _sort<String>((OneLs d) => d.name, columnIndex, ascending)),
           DataColumn(
               label: const Text('Customer (phone)'),
-
               onSort: (int columnIndex, bool ascending) =>
                   _sort<String>((OneLs d) => d.phone, columnIndex, ascending)),
           DataColumn(
@@ -259,17 +309,17 @@ class _MyTableAppState extends State<MyTableApp> {
           DataColumn(
               label: const Text('Date (updated at)'),
 //              numeric: true,
-              onSort: (int columnIndex, bool ascending) =>
-                  _sort<String>((OneLs d) => d.updatedAt, columnIndex, ascending)),
+              onSort: (int columnIndex, bool ascending) => _sort<String>(
+                  (OneLs d) => d.updatedAt, columnIndex, ascending)),
           DataColumn(
               label: const Text('Nth (times at)'),
 //              numeric: true,
               onSort: (int columnIndex, bool ascending) =>
                   _sort<String>((OneLs d) => d.nth, columnIndex, ascending)),
-          DataColumn(
-              label: const Text('(action) (settings)'),
-//              numeric: true,
-              ),
+//          DataColumn(
+//            label: const Text('(action) (settings)'),
+////              numeric: true,
+//          ),
         ],
       ),
     );

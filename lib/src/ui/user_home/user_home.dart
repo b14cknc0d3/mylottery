@@ -101,7 +101,10 @@ class _HomeListPageState extends State<HomeListPage> {
           ]);
         } else if (state is BottomNavBarLoadingState) {
           return Center(
+
+
             child: Container(
+
               child: CircularProgressIndicator(),
             ),
           );

@@ -57,7 +57,9 @@ class _SaleListViewState extends State<SaleListView> {
           ],
         ),
         Expanded(child: _DataTableView()),
-        SizedBox(height: 35,),
+        SizedBox(
+          height: 35,
+        ),
       ],
     );
   }
@@ -90,15 +92,37 @@ class _DataTableView extends StatelessWidget {
     return BlocBuilder<SaleListBloc, SaleListState>(
       builder: (context, state) {
         if (state is SaleListStateLoading) {
-          return Container(child: Center(child: Container(child: CircularProgressIndicator())));
+          return Center(child: Container(child: CircularProgressIndicator()));
         }
         if (state is SaleListStateError) {
-          return Text('error');
+          return Padding(
+            padding: EdgeInsets.all(8.0),
+            child: Center(
+                child: Text(
+                  '!error while fetching data...',
+                  textAlign: TextAlign.center,
+                  style: TextStyle(
+                      color: Colors.blueAccent,
+                      fontSize: 22,
+                      fontWeight: FontWeight.bold),
+                )),
+          );
         }
         if (state is SaleListStateSuccess) {
           return state.items.isEmpty
-              ? Text('not data')
-              : MyTableApp(items:state.items);
+              ? Padding(
+                  padding: EdgeInsets.all(8.0),
+                  child: Center(
+                      child: Text(
+                    'no data +',
+                    textAlign: TextAlign.center,
+                    style: TextStyle(
+                        color: Colors.blueAccent,
+                        fontSize: 22,
+                        fontWeight: FontWeight.bold),
+                  )),
+                )
+              : MyTableApp(items: state.items);
         }
         return _showDialog(context);
       },

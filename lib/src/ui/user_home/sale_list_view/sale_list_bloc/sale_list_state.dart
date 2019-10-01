@@ -32,3 +32,20 @@ class SaleListStateError extends SaleListState{
   @override
   String toString() => 'SaleListState error $error';
 }
+
+class SaleListDeleteSuccess extends SaleListState{
+  final bool success;
+
+  SaleListDeleteSuccess({@required this.success}):super([success]);
+  @override
+  String toString() => 'SaleListDeletedSate --->success : ${success.toString()}';
+
+}
+class SaleListDeleteError extends SaleListState{
+  final String error;
+
+  SaleListDeleteError({@required this.error}):super([error]);
+  @override
+  String toString() => 'SaleListDeletedSate --->xerror : ${error.toString()}';
+
+}
