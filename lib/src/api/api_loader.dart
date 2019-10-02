@@ -43,7 +43,11 @@ class ApiLoader {
     final a = await client.deleteSale(id, key);
     return a;
   }
-
+Future<bool> addSale(OneLs listOneLs)async{
+  var key = await readKey();
+  final a = await client.addSale(listOneLs, key);
+  return a;
+}
   Future<bool> hasKey() async {
     final prefs = await SharedPreferences.getInstance();
     final k = 'key';

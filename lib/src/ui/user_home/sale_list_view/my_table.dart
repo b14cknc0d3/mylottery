@@ -6,7 +6,11 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:my_lottery/src/api/api_loader.dart';
 import 'package:my_lottery/src/api/api_provider.dart';
 import 'package:my_lottery/src/model/saledata_item.dart';
+import 'package:my_lottery/src/model/search_result_list.dart';
+import 'package:my_lottery/src/ui/user_home/add_sale/add_sale_page.dart';
+import 'package:my_lottery/src/ui/user_home/add_sale/sale_add_bloc/bloc.dart';
 import 'package:my_lottery/src/ui/user_home/sale_list_view/sale_list_bloc/bloc.dart';
+
 // ignore: unused_element
 void _setTargetPlatformForDesktop() {
   TargetPlatform targetPlatform;
@@ -208,7 +212,11 @@ class _MyTableAppState extends State<MyTableApp> {
         ],
         selectedActions: <Widget>[
           IconButton(
-            icon: Icon(Icons.delete_forever,color: Colors.red,semanticLabel: 'delete sale',),
+            icon: Icon(
+              Icons.delete_forever,
+              color: Colors.red,
+              semanticLabel: 'delete sale',
+            ),
             onPressed: () {
               setState(() {
                 var rowSelectedCount =
@@ -216,10 +224,11 @@ class _MyTableAppState extends State<MyTableApp> {
                 print('RSC :$rowSelectedCount');
                 if (rowSelectedCount == 1) {
                   for (var row in _items) {
-                    if (row.selected == true && row.selected != null) {
+                    if (row.selected == true) {
                       print("u selected : ${row.id} ==> ${row.lno}");
                       saleListBloc.dispatch(SaleDataDeleteEvent(id: row.id));
-//                      apiLoader.deleteSale(row.id);
+                      Future.delayed(Duration(milliseconds: 300));
+
                       saleListBloc.dispatch(SaleListRefresh());
                     } else {
                       print('XxXxX');
@@ -258,6 +267,61 @@ class _MyTableAppState extends State<MyTableApp> {
 //              apiLoader.deleteSale();
             },
           ),
+          IconButton(
+            icon: Icon(Icons.edit),
+            onPressed: () {
+              setState(() {
+                var rowSelectedCount =
+                    _items?.where((d) => d?.selected == true)?.toList()?.length;
+                print('RSC :$rowSelectedCount');
+                if (rowSelectedCount == 1 && rowSelectedCount != null) {
+                  for (var row in _items) {
+                    if (row.selected == true) {
+                      print(row);
+                      print("u selected to edit: ${row.id} ==> ${row.lno}");
+
+
+                      Navigator.of(context).push(MaterialPageRoute(
+                          builder: (BuildContext context) => BlocProvider(
+                              builder: (context) => SaleListAddBloc(apiLoader),
+                              child: SaleListAddPage(
+                                item: row,
+                              ))));
+                    } else {
+                      print('cant edit error');
+                    }
+                  }
+                } else {
+                  Scaffold.of(context)
+                    ..showSnackBar(SnackBar(
+                        backgroundColor: Colors.redAccent,
+                        elevation: 2.0,
+                        behavior: SnackBarBehavior.floating,
+                        action: SnackBarAction(
+                            label: 'x',
+                            onPressed: () {
+                              Scaffold.of(context)
+                                ..hideCurrentSnackBar(
+                                    reason: SnackBarClosedReason.hide);
+                            }),
+                        content: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: <Widget>[
+                            Icon(Icons.warning),
+                            Text(
+                              'You can\'t edit multiple data at once !',
+                              style: TextStyle(
+                                fontWeight: FontWeight.w600,
+                                fontSize: 14,
+                              ),
+                              textAlign: TextAlign.center,
+                            ),
+                          ],
+                        )));
+                }
+              });
+            },
+          )
         ],
 //        mobileIsLoading: CircularProgressIndicator(),
         noItems: Text("Not  Found"),

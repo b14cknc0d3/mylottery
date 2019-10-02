@@ -13,17 +13,17 @@ class SaleListBloc extends Bloc<SaleListEvent, SaleListState> {
   @override
   SaleListState get initialState => SaleListStateEmpty();
 
-  @override
-  Stream<SaleListState> transformEvents(Stream<SaleListEvent> events,
-      Stream<SaleListState> Function(SaleListEvent event) next) {
-    return (events as Observable<SaleListEvent>)
-        .debounceTime(
-          Duration(milliseconds: 300),
-        )
-        .switchMap(next);
-
-//    return super.transformEvents( events, next );
-  }
+//  @override
+//  Stream<SaleListState> transformEvents(Stream<SaleListEvent> events,
+//      Stream<SaleListState> Function(SaleListEvent event) next) {
+//    return (events as Observable<SaleListEvent>)
+//        .debounceTime(
+//          Duration(milliseconds: 300),
+//        )
+//        .switchMap(next);
+//
+////    return super.transformEvents( events, next );
+//  }
 
   @override
   Stream<SaleListState> mapEventToState(
@@ -52,8 +52,9 @@ class SaleListBloc extends Bloc<SaleListEvent, SaleListState> {
   Stream<SaleListState>_mapEventIsDeleted(int id) async*{
     yield SaleListStateLoading();
     try{
+      Future.delayed(Duration(milliseconds: 300));
       yield SaleListDeleteSuccess(success: await apiLoader.deleteSale(id));
-     onEvent(SaleListRefresh());
+
 
     }catch(e){
       Exception(e);

@@ -8,7 +8,7 @@ import 'package:my_lottery/src/api/bloc.dart';
 import 'package:my_lottery/src/ui/login/login_bloc/bloc.dart';
 import 'package:my_lottery/src/ui/search_page/new_search_page.dart';
 
-//import 'package:my_lottery/src/ui/search_page/search_home.dart';
+
 import 'package:my_lottery/src/utils/utils.dart';
 
 //import 'package:flutter_custom_clippers/flutter_custom_clippers.dart';

@@ -4,6 +4,7 @@ import 'package:my_lottery/src/api/api_loader.dart';
 import 'package:my_lottery/src/api/api_provider.dart';
 import 'package:my_lottery/src/api/bloc.dart';
 import 'package:curved_navigation_bar/curved_navigation_bar.dart';
+import 'package:my_lottery/src/ui/user_home/add_sale/add_sale_page.dart';
 import 'package:my_lottery/src/ui/user_home/chart_view/chart.dart';
 import 'package:my_lottery/src/ui/user_home/chart_view/chart_new.dart';
 import 'package:my_lottery/src/ui/user_home/sale_list_view/sale_list_bloc/bloc.dart';
@@ -11,6 +12,8 @@ import 'package:my_lottery/src/ui/user_home/sale_list_view/sale_list_view.dart';
 import 'package:my_lottery/src/utils/utils.dart';
 import 'package:my_lottery/src/widget/BottomNavBar_Bloc/bloc.dart';
 import 'package:my_lottery/src/widget/buttom_nav_bar.dart';
+
+import 'add_sale/sale_add_bloc/bloc.dart';
 
 class UserHome extends StatelessWidget {
   final ApiLoader apiLoader;
@@ -21,16 +24,15 @@ class UserHome extends StatelessWidget {
   Widget build(BuildContext context) {
     return Material(
       child: MultiBlocProvider(
-           providers: [
-             BlocProvider<SaleListBloc>(
-               builder: (BuildContext context) => SaleListBloc(apiLoader: apiLoader),
-             ),
-             BlocProvider<BottomNavBarBloc>(
-              builder: (BuildContext context) => BottomNavBarBloc(),
-             ),
-
-           ],
-
+        providers: [
+          BlocProvider<SaleListBloc>(
+            builder: (BuildContext context) =>
+                SaleListBloc(apiLoader: apiLoader),
+          ),
+          BlocProvider<BottomNavBarBloc>(
+            builder: (BuildContext context) => BottomNavBarBloc(),
+          ),
+        ],
         child: BlocProvider<BottomNavBarBloc>(
           builder: (context) => BottomNavBarBloc(),
           child: HomeListPage(apiLoader: apiLoader),
@@ -50,12 +52,14 @@ class HomeListPage extends StatefulWidget {
 }
 
 class _HomeListPageState extends State<HomeListPage> {
+  final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
   int currentTab = 0;
   PageController pageController;
-  ApiLoader apiLoader;
+  ApiLoader apiLoader =ApiLoader(ApiProvider());
   AuthenticationBloc authenticationBloc;
 
   BottomNavBarBloc bottomNavBarBloc;
+  SaleListAddBloc _saleListAddBloc;
 
   _HomeListPageState();
 
@@ -63,7 +67,6 @@ class _HomeListPageState extends State<HomeListPage> {
     setState(() {
       currentTab = tab;
       bottomNavBarBloc.dispatch(BnbIndexChangedEvent(index: tab));
-
     });
   }
 
@@ -80,8 +83,16 @@ class _HomeListPageState extends State<HomeListPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      key: _scaffoldKey,
       floatingActionButton: FloatingActionButton(
-        onPressed: () {},
+        onPressed: () {
+          Navigator.pushReplacement(context,
+              MaterialPageRoute(builder: (BuildContext context) {
+            return BlocProvider(
+                child: SaleListAddPage(saleListAddBloc: _saleListAddBloc),
+                builder: (context) => SaleListAddBloc(apiLoader));
+          }));
+        },
         child: Icon(Icons.add),
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.endDocked,
@@ -101,10 +112,7 @@ class _HomeListPageState extends State<HomeListPage> {
           ]);
         } else if (state is BottomNavBarLoadingState) {
           return Center(
-
-
             child: Container(
-
               child: CircularProgressIndicator(),
             ),
           );

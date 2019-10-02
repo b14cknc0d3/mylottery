@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:my_lottery/src/api/api_loader.dart';
 import 'package:my_lottery/src/api/api_provider.dart';
+import 'package:my_lottery/src/ui/user_home/add_sale/sale_add_bloc/bloc.dart';
 import 'package:my_lottery/src/ui/user_home/sale_list_view/my_table.dart';
 import 'package:my_lottery/src/ui/user_home/sale_list_view/sale_list_bloc/bloc.dart';
 import 'package:my_lottery/src/utils/utils.dart';
@@ -17,10 +18,12 @@ class _SaleListViewState extends State<SaleListView> {
   final ApiLoader apiLoader = ApiLoader(ApiProvider());
   SaleListBloc _saleListBloc;
 
+
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
+
     _saleListBloc = BlocProvider.of<SaleListBloc>(context);
     _saleListBloc.dispatch(SaleListRefresh());
   }

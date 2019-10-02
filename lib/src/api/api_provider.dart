@@ -3,11 +3,15 @@ import 'dart:convert';
 import 'package:my_lottery/src/model/saledata_item.dart';
 
 import 'package:http/http.dart' as http;
+
 import 'package:shared_preferences/shared_preferences.dart';
 
 class ApiProvider {
   static final baseUrl = 'http://yla-heroku.herokuapp.com';
   static final loginUrl = '$baseUrl/auth/login/';
+
+
+
 
   Future<String> login(String username, String password) async {
     final response = await Future.delayed(
@@ -61,13 +65,12 @@ class ApiProvider {
     if (response.statusCode == 200) {
       print('SALEDATA:$data');
 //      print('parsedJson Data:${parsedJson(data)[0].phone}//:${parsedJson(data)[0].lno}');
-     if(data.isNotEmpty){
-       print(parsedJson(data));
-       return parsedJson(data);
-     }else{
-       return [];
-
-     }
+      if (data.isNotEmpty) {
+        print(parsedJson(data));
+        return parsedJson(data);
+      } else {
+        return [];
+      }
     } else {
       return [];
     }
@@ -89,27 +92,46 @@ class ApiProvider {
     }
   }
 
-
-  Future deleteSale(int id,String key) async {
-    try{
-    final a =   await http.delete('$baseUrl/api/saledatas/one/$id',headers: {
+  Future deleteSale(int id, String key) async {
+    try {
+      final a = await http.delete('$baseUrl/api/saledatas/one/$id', headers: {
         "Accept": "application/json",
         'Authorization': 'Token $key'
       });
-    if(a.statusCode ==204 || a.statusCode ==200){
-      print(a.statusCode);
-      return true;
-    }else{
-      return false;
-    }
-
-
-    }catch (e){
+      if (a.statusCode == 204 || a.statusCode == 200) {
+        print(a.statusCode);
+        return true;
+      } else {
+        return false;
+      }
+    } catch (e) {
       throw Exception(e.toString());
     }
-
   }
 
+  Future<bool> addSale(OneLs listOneLs, String key) async {
+    final OneLs parsed = listOneLs ;
+    print('Parsed $parsed');
+    var item =parsed.toMap();
+    print('items:$item');
+    final response = await http.post(
+      '$baseUrl/api/saledatas/one/',
+      headers: {
+        "Accept": "application/json",
+        'Authorization': 'Token $key',
+      },
+      body: item,
+    );
+    print('add true ?${response.statusCode}');
+   if(response.statusCode == 200){
+
+     return true;
+   }else{
+     return false;
+   }
+  }
+
+  ///#################
 }
 
 List<OneLs> parsedJson(dynamic responseBody) {
