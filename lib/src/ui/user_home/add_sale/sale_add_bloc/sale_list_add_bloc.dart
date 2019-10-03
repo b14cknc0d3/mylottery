@@ -29,6 +29,8 @@ class SaleListAddBloc extends Bloc<SaleListAddEvent, SaleListAddState> {
   ) async* {
     if (event is SaleListAddBottomPressed) {
       yield* _mapSaleListAddBottomPressed(event.items);
+    }else if(event is SaleListPatchBottomPressed){
+      yield* _mapSaleListPatchBottomPressed(event.items);
     }
   }
 
@@ -37,8 +39,31 @@ class SaleListAddBloc extends Bloc<SaleListAddEvent, SaleListAddState> {
     yield SaleListAddStateLoading();
     try{
       Future.delayed(Duration(milliseconds: 300));
-     final bool a = await apiLoader.addSale(items);
-     yield SaleListAddSuccessState(a);
+     final int a = await apiLoader.addSale(items);
+     if(a == 200){
+       yield SaleListAddSuccessState(a);
+
+     }else{
+       yield SaleListAddErrorState(a.toString());
+     }
+
+
+    }catch(e){
+      yield SaleListAddErrorState(e.toString());
+    }
+  }
+
+  Stream<SaleListAddState>  _mapSaleListPatchBottomPressed(OneLs items) async*{
+    yield SaleListAddStateLoading();
+    try{
+      Future.delayed(Duration(milliseconds: 300));
+      final int a = await apiLoader.doPatchSale(items);
+      if(a == 200){
+        yield SaleListPatchSuccessState(a);
+
+      }else{
+        yield SaleListAddErrorState(a.toString());
+      }
 
 
     }catch(e){

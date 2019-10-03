@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:my_lottery/src/api/api_loader.dart';
 import 'package:my_lottery/src/api/api_provider.dart';
@@ -9,6 +10,7 @@ import 'package:my_lottery/src/ui/user_home/chart_view/chart.dart';
 import 'package:my_lottery/src/ui/user_home/chart_view/chart_new.dart';
 import 'package:my_lottery/src/ui/user_home/sale_list_view/sale_list_bloc/bloc.dart';
 import 'package:my_lottery/src/ui/user_home/sale_list_view/sale_list_view.dart';
+import 'package:my_lottery/src/ui/user_home/search_sale/user_search.dart';
 import 'package:my_lottery/src/utils/utils.dart';
 import 'package:my_lottery/src/widget/BottomNavBar_Bloc/bloc.dart';
 import 'package:my_lottery/src/widget/buttom_nav_bar.dart';
@@ -84,12 +86,13 @@ class _HomeListPageState extends State<HomeListPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       key: _scaffoldKey,
+
       floatingActionButton: FloatingActionButton(
         onPressed: () {
           Navigator.pushReplacement(context,
               MaterialPageRoute(builder: (BuildContext context) {
             return BlocProvider(
-                child: SaleListAddPage(saleListAddBloc: _saleListAddBloc),
+                child: SaleListAddPage(saleListAddBloc: _saleListAddBloc,),
                 builder: (context) => SaleListAddBloc(apiLoader));
           }));
         },
@@ -103,7 +106,7 @@ class _HomeListPageState extends State<HomeListPage> {
         if (state is BnbIndexOneState) {
           return PageView(controller: pageController, children: [MyApp()]);
         } else if (state is BnbIndexTwoState) {
-          return PageView(controller: pageController, children: []);
+          return PageView(controller: pageController, children: [SearchUserPage(apiLoader: apiLoader,)]);
         } else if (state is BnbIndexThreeState) {
           return PageView(controller: pageController, children: [
             SettingsPage(
@@ -152,6 +155,7 @@ class SettingsPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    SystemChrome.setEnabledSystemUIOverlays([]);
     return Container(
       child: Center(
         child: Container(

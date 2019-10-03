@@ -13,3 +13,11 @@ class TextChanged extends SearchEvent {
   @override
   String toString() => 'TextChanged Text:$text';
 }
+class TextChangedUser extends SearchEvent{
+  final String text;
+
+  TextChangedUser({@required this.text}) : super([text]);
+  @override
+  String toString() => 'TextChanged Text:$text';
+
+}

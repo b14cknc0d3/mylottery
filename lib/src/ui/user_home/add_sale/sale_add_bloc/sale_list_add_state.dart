@@ -11,11 +11,19 @@ class InitialSaleListAddState extends SaleListAddState {
   String toString()=> '-----------init sale list add state -----------';
 }
 class SaleListAddSuccessState extends SaleListAddState{
-  final bool success;
+  final int success;
 
   SaleListAddSuccessState(this.success):super([success]);
+  @override
+  String toString() =>'SaleListAddSuccessState => {$success} created' ;
 }
+class SaleListPatchSuccessState extends SaleListAddState{
+  final int success;
 
+  SaleListPatchSuccessState(this.success):super([success]);
+  @override
+  String toString() =>'SaleListPatchSuccessState => {$success} created' ;
+}
 class SaleListAddErrorState extends SaleListAddState{
   final String error;
 

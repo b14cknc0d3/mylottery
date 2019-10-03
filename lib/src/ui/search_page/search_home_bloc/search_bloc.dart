@@ -21,10 +21,10 @@ class SearchBloc extends Bloc<SearchEvent, SearchState> {
   ) {
     final observableStream = events as Observable<SearchEvent>;
     final nonDebounceStream = observableStream.where((event) {
-      return (event is! TextChanged);
+      return (event is! TextChanged || event is! TextChangedUser);
     });
     final debounceStream = observableStream.where((event) {
-      return (event is TextChanged);
+      return (event is TextChanged || event is TextChangedUser);
     }).debounceTime(Duration(milliseconds: 300));
     return super
         .transformEvents(nonDebounceStream.mergeWith([debounceStream]), next);
@@ -42,6 +42,22 @@ class SearchBloc extends Bloc<SearchEvent, SearchState> {
           yield SearchStateEmpty();
         }else{
           final res = await apiLoader.search(event.text);
+          print('SearchBloc:ApiLoader:Res ${res.oneLs.length}');
+          yield SearchStateSuccess(items:res.oneLs);
+        }
+
+
+      } catch (e) {
+        yield SearchStateError(e.toString()) ;
+      }
+    }else if(event is TextChangedUser){
+      yield SearchStateLoading();
+      try {
+        await Future<void>.delayed(Duration(seconds: 2));
+        if(event.text == null){
+          yield SearchStateEmpty();
+        }else{
+          final res = await apiLoader.searchUser(event.text);
           print('SearchBloc:ApiLoader:Res ${res.oneLs.length}');
           yield SearchStateSuccess(items:res.oneLs);
         }

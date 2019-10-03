@@ -8,9 +8,10 @@ import 'package:my_lottery/src/api/api_provider.dart';
 import 'package:my_lottery/src/model/saledata_item.dart';
 import 'package:my_lottery/src/model/search_result_list.dart';
 import 'package:my_lottery/src/ui/user_home/add_sale/add_sale_page.dart';
+import 'package:my_lottery/src/ui/user_home/add_sale/edit_sale_page.dart';
 import 'package:my_lottery/src/ui/user_home/add_sale/sale_add_bloc/bloc.dart';
 import 'package:my_lottery/src/ui/user_home/sale_list_view/sale_list_bloc/bloc.dart';
-
+import 'package:my_lottery/constance.dart';
 // ignore: unused_element
 void _setTargetPlatformForDesktop() {
   TargetPlatform targetPlatform;
@@ -150,7 +151,7 @@ class _MyTableAppState extends State<MyTableApp> {
                 DataCell(Text('${one.phone.toString()}')),
                 DataCell(Text('${one.address}')),
                 DataCell(Text('${one.reseller}')),
-                DataCell(Text('${one.prizeDetails}')),
+                DataCell(Text('${one.prizeDetails.toLowerCase()}')),
                 DataCell(Text('${one.isWinner}')),
                 DataCell(Text('${one.createdAt}')),
                 DataCell(Text('${one.updatedAt.toString()}')),
@@ -284,7 +285,7 @@ class _MyTableAppState extends State<MyTableApp> {
                       Navigator.of(context).push(MaterialPageRoute(
                           builder: (BuildContext context) => BlocProvider(
                               builder: (context) => SaleListAddBloc(apiLoader),
-                              child: SaleListAddPage(
+                              child: SaleListEditPage(
                                 item: row,
                               ))));
                     } else {

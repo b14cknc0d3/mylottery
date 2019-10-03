@@ -16,6 +16,10 @@ class ApiLoader {
     print('result.items from apiLoader:${result.oneLs.length}');
     return result;
   }
+  Future<SearchResult> searchUser(String term)   async{
+    final result = await client.userSearchSale(term);
+    return result;
+  }
 
   Future<List<OneLs>> getSaleData() async {
     final result = await client.getItem();
@@ -43,9 +47,9 @@ class ApiLoader {
     final a = await client.deleteSale(id, key);
     return a;
   }
-Future<bool> addSale(OneLs listOneLs)async{
+Future<int> addSale(OneLs listOneLs)async{
   var key = await readKey();
-  final a = await client.addSale(listOneLs, key);
+  final int a = await client.addSale(listOneLs, key);
   return a;
 }
   Future<bool> hasKey() async {
@@ -58,7 +62,12 @@ Future<bool> addSale(OneLs listOneLs)async{
       return true;
     }
   }
-
+Future<int> doPatchSale(OneLs listOneLs) async{
+  var key = await readKey();
+  Future.delayed(Duration(milliseconds: 300));
+  final a = client.patchSale(listOneLs, key);
+  return a;
+}
   Future<String> readKey() async {
     final prefs = await SharedPreferences.getInstance();
     final k = 'key';

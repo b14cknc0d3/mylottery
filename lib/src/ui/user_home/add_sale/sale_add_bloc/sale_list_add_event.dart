@@ -19,3 +19,15 @@ class SaleListAddBottomPressed extends SaleListAddEvent {
                                      
                        ''';
 }
+
+class SaleListPatchBottomPressed extends SaleListAddEvent {
+  final OneLs items;
+
+  SaleListPatchBottomPressed({@required this.items}) : assert(items != null);
+
+  @override
+  String toString() => '''SaleListPatchBottomPressed items :  \n
+                                     $items        
+                                     
+                       ''';
+}

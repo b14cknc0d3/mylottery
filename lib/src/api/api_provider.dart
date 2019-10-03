@@ -10,9 +10,6 @@ class ApiProvider {
   static final baseUrl = 'http://yla-heroku.herokuapp.com';
   static final loginUrl = '$baseUrl/auth/login/';
 
-
-
-
   Future<String> login(String username, String password) async {
     final response = await Future.delayed(
         Duration(seconds: 2),
@@ -109,10 +106,29 @@ class ApiProvider {
     }
   }
 
-  Future<bool> addSale(OneLs listOneLs, String key) async {
-    final OneLs parsed = listOneLs ;
+  Future<int> patchSale(OneLs listOneLs, String key) async {
+    final OneLs parsed = listOneLs;
     print('Parsed $parsed');
-    var item =parsed.toMap();
+    var item = parsed.toMap();
+    print('items:$item');
+    print('patch_utl :$baseUrl/api/saledatas/one/${listOneLs.id}');
+    final response = await http.patch(
+      '$baseUrl/api/saledatas/one/${listOneLs.id}',
+      headers: {
+        "Accept": "application/json",
+        'Authorization': 'Token $key',
+      },
+      body: item,
+    );
+    print('patch_utl :$baseUrl/api/saledatas/one/${listOneLs.id}');
+    print('patch true ?${response.statusCode}');
+    return response.statusCode;
+  }
+
+  Future<int> addSale(OneLs listOneLs, String key) async {
+    final OneLs parsed = listOneLs;
+    print('Parsed $parsed');
+    var item = parsed.toMap();
     print('items:$item');
     final response = await http.post(
       '$baseUrl/api/saledatas/one/',
@@ -123,14 +139,31 @@ class ApiProvider {
       body: item,
     );
     print('add true ?${response.statusCode}');
-   if(response.statusCode == 200){
-
-     return true;
-   }else{
-     return false;
-   }
+    if (response.statusCode == 200) {
+      return response.statusCode;
+    } else {
+      return response.statusCode;
+    }
   }
+  Future<SearchResult> userSearchSale(String term) async {
+    final response = await http.get(
+        '$baseUrl/api/saledatas/search/one/?filter{lno.icontains}=$term',
+        headers: {
+          "Accept": "application/json",
+          'Authorization': 'Token f6c3e63f1a95b0709d2b70075d0d592e0c4a5f85'
+        });
 
+    final data = json.decode(utf8.decode(response.bodyBytes));
+    print('DATA :$data');
+    if (response.statusCode == 200) {
+      final res = SearchResult.fromJson(data);
+      print('Result :${res.oneLs}');
+      return res;
+    } else {
+      //print('Erro : not 200');
+      throw Exception('Error No Results');
+    }
+  }
   ///#################
 }
 
